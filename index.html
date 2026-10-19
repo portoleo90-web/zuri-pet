@@ -23,7 +23,8 @@
 .schedule-instructions{margin:5px 0}
 @media(max-width:520px){.schedule-dose{gap:9px;padding:10px}.schedule-time{width:60px;min-width:60px}.schedule-dose-info .subtle{font-size:12px}.schedule-medicine{font-size:15px}}
 .pet-photo{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}.puppy{overflow:hidden;position:relative}.puppy .pet-photo{position:absolute;inset:0}.puppy span{position:relative;z-index:0}.rg-card{background:linear-gradient(135deg,#fffdfb,#fff0f3);border:1px solid #e7cfd0;border-radius:20px;overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow)}.rg-card-top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(90deg,#f0cbd5,#f5e8d8);color:#87525e;font-size:12px;font-weight:900;letter-spacing:.1em}.rg-card-body{display:flex;gap:17px;padding:18px;align-items:flex-start}.rg-photo-wrap{width:126px;min-width:126px;height:145px;border:2px solid #ead5d5;border-radius:13px;background:#fff;display:grid;place-items:center;overflow:hidden;font-size:52px;color:#b38a91}.rg-photo-wrap img{width:100%;height:100%;object-fit:cover}.rg-info{flex:1;min-width:0}.rg-info h3{font-size:23px;margin:0;color:var(--rose)}.rg-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:13px}.rg-details{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 16px}.rg-details div{min-width:0}.rg-details small{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.rg-details strong{display:block;font-size:13px;overflow-wrap:anywhere}.rg-card-foot{padding:8px 16px;background:#fff9f6;border-top:1px dashed #e7cfd0;color:#8e7773;font-size:10px;text-align:right}@media(max-width:520px){.rg-card-body{padding:12px;gap:12px}.rg-photo-wrap{width:92px;min-width:92px;height:112px}.rg-info h3{font-size:20px}.rg-details{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 12px}.rg-details strong{font-size:12px}.rg-card-top{padding:10px 12px;font-size:10px}}
-.hidden{display:none!important}
+.cloud-sync-status{margin:10px 0 0;text-align:right;font-size:10px;line-height:1.4;color:var(--muted);opacity:.9}.cloud-sync-status.synced{color:var(--green)}.cloud-sync-status.error{color:var(--rose)}
+ .hidden{display:none!important}
 @media(max-width:1000px){.app{grid-template-columns:205px 1fr}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.content-grid{grid-template-columns:1fr}.sidebar{padding:20px 12px}}
 @media(max-width:680px){.dose-actions{max-width:100%;justify-content:flex-start}.app{display:block}.sidebar{display:none}.main{padding:18px 14px 95px}.topbar{margin-bottom:17px}.topbar h2{font-size:23px}.top-actions .pill{display:none}.welcome{padding:19px;border-radius:20px}.welcome h3{font-size:22px}.welcome p{font-size:13px}.puppy{width:72px;height:72px;font-size:43px;border-radius:25px}.cards{gap:9px}.stat{padding:13px;border-radius:16px}.stat strong{font-size:22px}.stat-top{font-size:12px}.stat-icon{width:30px;height:30px}.panel{padding:15px}.quick-grid{gap:8px}.quick{padding:10px;gap:8px}.quick .qi{width:33px;height:33px;font-size:18px}.quick strong{font-size:12px}.quick small{font-size:11px}.section-intro{align-items:center}.section-intro h3{font-size:21px}.section-intro p{font-size:12px}.section-intro .btn{padding:10px;font-size:12px}.profile-grid,.field-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fffaf8;border-top:1px solid var(--line);padding:8px 5px calc(8px + env(safe-area-inset-bottom));justify-content:space-around;z-index:5}.bottom-nav button{border:0;background:transparent;color:#887b76;display:grid;justify-items:center;gap:3px;font-size:10px;min-width:48px}.bottom-nav button span{font-size:19px}.bottom-nav button.active{color:var(--rose);font-weight:800}.table{min-width:610px}.pill{display:none}}
 </style>
@@ -71,6 +72,7 @@
         <div class="panel"><div class="panel-head"><div><h3>Próximos cuidados</h3></div><button class="text-btn" data-goto="agenda">Ver agenda →</button></div><div id="homeEventList" class="event-list"></div></div>
       </div>
       <p class="disclaimer">Protótipo de teste: os registros ficam salvos neste navegador. Ainda não está conectado ao Firebase.</p>
+      <p id="cloudSyncStatus" class="cloud-sync-status" aria-live="polite">Nuvem: ainda não conectada</p>
     </section>
 
     <section class="page" id="page-health">
@@ -154,13 +156,68 @@
 <div class="modal-backdrop" id="healthViewBackdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="healthViewTitle"><div class="modal-head"><h3 id="healthViewTitle">Detalhes do registro</h3><button class="close" type="button" id="healthViewClose" aria-label="Fechar">×</button></div><div id="healthViewContent" class="detail-content"></div><div class="form-actions"><button type="button" class="btn secondary" id="healthViewDone">Fechar</button></div></div></div>
 <div class="modal-backdrop" id="modalBackdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><h3 id="modalTitle">Novo registro</h3><button class="close" id="modalClose" aria-label="Fechar">×</button></div><form id="recordForm"><div id="modalFields" class="field-grid"></div><div class="form-actions"><button type="button" class="btn secondary" id="cancelModal">Cancelar</button><button type="submit" class="btn">Salvar registro</button></div></form></div></div>
 <div class="toast" id="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<style>
+#authGate{position:fixed;inset:0;z-index:9999;background:#fbf7f4;display:flex;align-items:center;justify-content:center;padding:20px}
+#authGate .auth-card{width:min(420px,100%);background:#fffdfb;border:1px solid #eee4df;border-radius:24px;padding:26px;box-shadow:0 15px 50px #5b3d3818}
+#authGate h2{margin:0 0 6px;color:#984d62}#authGate p{color:#897e7a;font-size:14px}
+#authGate label{display:block;font-size:13px;font-weight:700;margin:13px 0 6px}
+#authGate input{width:100%;padding:12px;border:1px solid #eee4df;border-radius:11px;background:white}
+#authGate button{margin-top:15px;width:100%;border:0;border-radius:12px;background:#984d62;color:white;padding:12px;font-weight:700}
+#authMessage{font-size:12px;white-space:pre-wrap;color:#984d62;margin-top:12px}
+#cloudAccount{display:flex;justify-content:flex-end;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px;font-size:11px;color:#897e7a}
+#cloudAccount button{border:1px solid #eabdc9;background:white;color:#984d62;border-radius:999px;padding:5px 9px;font-size:11px}
+</style>
+<div id="authGate">
+ <div class="auth-card">
+  <div style="font-size:35px;margin-bottom:8px">🐾</div>
+  <h2>Zuri Pet</h2><p>Entre com seu e-mail e senha para sincronizar os dados entre computador e celular.</p>
+  <form id="authForm">
+   <label for="authEmail">E-mail</label><input id="authEmail" type="email" autocomplete="username" required>
+   <label for="authPassword">Senha</label><input id="authPassword" type="password" autocomplete="current-password" required>
+   <button id="authSubmit" type="submit">Entrar</button>
+   <div id="authMessage">A sessão ficará salva neste dispositivo até você sair da conta.</div>
+  </form>
+ </div>
+</div>
+<div id="cloudAccount" style="display:none"><span id="cloudAccountEmail"></span><button id="cloudLogout" type="button">Sair da conta</button></div>
+
 <script>
+// 1) Cole os dados do Firebase Console > Configurações do projeto > Seus apps > SDK setup and configuration.
+const firebaseConfig = {
+  apiKey: "AIzaSyC3GQ0Gd8VmXMLutpnrQgmErL4ebXKh3Ys",
+  authDomain: "zuri-pet.firebaseapp.com",
+  projectId: "zuri-pet",
+  storageBucket: "zuri-pet.firebasestorage.app",
+  messagingSenderId: "864920723395",
+  appId: "1:864920723395:web:cb0b1c117eb40fa9952776"
+};
 const KEY='zuriPetPrototype_v1';
+const CLOUD_SYNC_KEY='zuriPetCloudLastSync_v1';
+function renderCloudSyncStatus(state='offline',date=null){const el=document.getElementById('cloudSyncStatus');if(!el)return;el.className='cloud-sync-status'+(state==='synced'?' synced':state==='error'?' error':'');if(state==='synced'&&date){const d=new Date(date);el.textContent='Sincronizado na nuvem em '+d.toLocaleDateString('pt-BR')+' às '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}else if(state==='error'){el.textContent='Nuvem: falha na sincronização';}else{el.textContent='Nuvem: ainda não conectada';}}
 const today=()=>new Date().toISOString().slice(0,10);
 const initial=()=>({profile:{name:'Zuri',species:'Canina',birth:'2026-04-08',sex:'Fêmea',breed:'',color:'',id:'',weight:'',vet:'',phone:'',emergency:'',alerts:'',notes:'',photo:''},health:[],medicines:[],medicationDoses:[],events:[],expenses:[],documents:[]});
 let db=loadDB(), modalType=null, editingId=null;db.medicationDoses=db.medicationDoses||[];
 function loadDB(){try{return {...initial(),...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){return initial()}}
-function saveDB(){syncHealthLinks();localStorage.setItem(KEY,JSON.stringify(db));renderAll()}
+let cloudUser=null, cloudReady=false, applyingCloud=false, cloudUnsubscribe=null, cloudSaveTimer=null;
+function saveDB(){syncHealthLinks();localStorage.setItem(KEY,JSON.stringify(db));renderAll();if(cloudReady&&!applyingCloud)scheduleCloudSave()}
+function firebaseConfigured(){return firebaseConfig.apiKey&&!firebaseConfig.apiKey.startsWith('COLE_')&&firebaseConfig.projectId&&!firebaseConfig.projectId.startsWith('COLE_')}
+function cloudDoc(){return firebase.firestore().collection('users').doc(cloudUser.uid).collection('zuriPet').doc('data')}
+function hasLocalData(){return !!(db.health.length||db.medicines.length||db.medicationDoses.length||db.events.length||db.expenses.length||db.documents.length||db.profile.name!=='Zuri'||db.profile.photo)}
+function authMessage(t){const el=document.getElementById('authMessage');if(el)el.textContent=t}
+function cloudStatus(state,date=null){renderCloudSyncStatus(state,date)}
+function scheduleCloudSave(){clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(saveCloud,800)}
+async function saveCloud(){if(!cloudReady||!cloudUser||applyingCloud)return;try{await cloudDoc().set({data:db,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedAtClient:new Date().toISOString()},{merge:true});cloudStatus('synced',new Date());localStorage.setItem(CLOUD_SYNC_KEY,new Date().toISOString())}catch(e){console.error('Firebase save error:',e);cloudStatus('error');}}
+async function startCloudSession(user){cloudUser=user;document.getElementById('authGate').style.display='none';document.getElementById('cloudAccount').style.display='flex';document.getElementById('cloudAccountEmail').textContent=user.email||'Conta conectada';cloudStatus('offline');
+ if(cloudUnsubscribe){cloudUnsubscribe();cloudUnsubscribe=null}const ref=cloudDoc();
+ try{const snap=await ref.get();if(!snap.exists){if(hasLocalData()){const ok=confirm('Encontramos dados salvos neste dispositivo. Deseja enviar esses dados para a nuvem e usá-los nos outros dispositivos?');if(ok){await ref.set({data:db,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedAtClient:new Date().toISOString()});cloudStatus('synced',new Date());}else{authMessage('Os dados locais foram mantidos.');}}else{await ref.set({data:db,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedAtClient:new Date().toISOString()});cloudStatus('synced',new Date());}}
+ else{const remote=snap.data();if(remote&&remote.data){applyingCloud=true;db={...initial(),...remote.data};db.medicationDoses=db.medicationDoses||[];localStorage.setItem(KEY,JSON.stringify(db));renderAll();applyingCloud=false;cloudStatus('synced',remote.updatedAtClient|| (remote.updatedAt&&remote.updatedAt.toDate?remote.updatedAt.toDate():new Date()));}}
+ cloudReady=true;cloudUnsubscribe=ref.onSnapshot(s=>{if(!s.exists||!s.data()||!s.data().data)return;const remote=s.data();if(remote.updatedAtClient&&localStorage.getItem(CLOUD_SYNC_KEY)===remote.updatedAtClient)return;applyingCloud=true;db={...initial(),...remote.data};db.medicationDoses=db.medicationDoses||[];localStorage.setItem(KEY,JSON.stringify(db));renderAll();applyingCloud=false;localStorage.setItem(CLOUD_SYNC_KEY,remote.updatedAtClient||'');cloudStatus('synced',remote.updatedAtClient||(remote.updatedAt&&remote.updatedAt.toDate?remote.updatedAt.toDate():new Date()));});
+ }catch(e){applyingCloud=false;cloudReady=false;console.error('Firebase cloud session error:',e);cloudStatus('error');alert('Não foi possível sincronizar com o Firebase. Verifique a configuração e as regras do Firestore.\n\n'+(e.message||e));}}
+async function initFirebaseAuth(){if(!firebaseConfigured()){authMessage('Configuração Firebase pendente. Preencha o bloco firebaseConfig no início do código.');document.getElementById('authGate').style.display='flex';return}try{if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);const auth=firebase.auth();await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);firebase.firestore();document.getElementById('authForm').addEventListener('submit',async e=>{e.preventDefault();const btn=document.getElementById('authSubmit');btn.disabled=true;btn.textContent='Entrando...';authMessage('Conectando...');try{await auth.signInWithEmailAndPassword(document.getElementById('authEmail').value.trim(),document.getElementById('authPassword').value)}catch(err){authMessage('Não foi possível entrar: '+(err.message||err)+'\nConfira o e-mail e a senha cadastrados no Firebase Authentication.')}finally{btn.disabled=false;btn.textContent='Entrar'}});document.getElementById('cloudLogout').addEventListener('click',async()=>{if(confirm('Deseja sair desta conta neste dispositivo?')){cloudReady=false;if(cloudUnsubscribe)cloudUnsubscribe();await auth.signOut();document.getElementById('authGate').style.display='flex';document.getElementById('cloudAccount').style.display='none';cloudStatus('offline')}});auth.onAuthStateChanged(user=>{if(user)startCloudSession(user);else{cloudReady=false;cloudUser=null;document.getElementById('authGate').style.display='flex';document.getElementById('cloudAccount').style.display='none';cloudStatus('offline')}})}catch(e){console.error(e);authMessage('Erro ao iniciar Firebase: '+(e.message||e))}}
+
 function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 function money(n){return Number(n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
 function healthEventType(h){const t=String(h.type||'Outro');if(t==='Vacina')return 'Vacina';if(t==='Consulta')return 'Consulta';if(t==='Medicamento')return 'Medicamento';if(t==='Exame')return 'Consulta';return 'Outro'}
@@ -301,6 +358,8 @@ document.getElementById('restoreJson').addEventListener('change',async e=>{let f
 function download(name,content,type){let blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
 syncHealthLinks();
 renderAll();
+renderCloudSyncStatus('offline');
+initFirebaseAuth();
 </script>
 </body>
 </html>
